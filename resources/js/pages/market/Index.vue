@@ -4,6 +4,7 @@ import { Link, usePage } from '@inertiajs/vue3'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import AppHeaderLayout from '@/layouts/app/AppHeaderLayout.vue'
 
 interface Category { id: number; name: string; slug: string; parent_id: number | null }
 const props = defineProps<{ categories: Category[] }>()
@@ -82,20 +83,9 @@ onMounted(() => fetchAds())
 </script>
 
 <template>
+  <AppHeaderLayout>
   <div class="container mx-auto p-4 space-y-6">
-    <div v-if="!isAuth" class="border rounded p-3 bg-amber-50 text-amber-900 flex items-center justify-between gap-3">
-      <div>
-        <div class="font-medium">Sign in to post your ad</div>
-        <div class="text-sm opacity-90">You need an account to create listings.</div>
-      </div>
-      <div class="flex gap-2">
-        <Link href="/login"><Button variant="outline">Log in</Button></Link>
-        <Link href="/register"><Button>Create account</Button></Link>
-      </div>
-    </div>
-    <Link v-else href="/logout" method="post" as="button">
-        <Button size="sm" variant="outline">Logout</Button>
-    </Link>
+
     <div class="flex items-center justify-between">
       <h1 class="text-2xl font-semibold">Marketplace</h1>
       <Link href="/listing/create">
@@ -185,4 +175,5 @@ onMounted(() => fetchAds())
       <Button variant="outline" :disabled="currentPage >= lastPage" @click="currentPage = currentPage + 1">Next</Button>
     </div>
   </div>
+  </AppHeaderLayout>
 </template>

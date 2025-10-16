@@ -2,6 +2,7 @@
 import { computed } from 'vue'
 import { Link } from '@inertiajs/vue3'
 import { Button } from '@/components/ui/button'
+import AppHeaderLayout from '@/layouts/app/AppHeaderLayout.vue'
 
 type Image = { id:number; path:string; is_cover:boolean; position:number }
 type Category = { id:number; name:string }
@@ -17,6 +18,7 @@ const cover = computed(() => props.ad.images.find(i => i.is_cover) || props.ad.i
 </script>
 
 <template>
+  <AppHeaderLayout>
   <div class="container mx-auto p-4 space-y-6 max-w-5xl">
     <div class="flex items-center justify-between">
       <Link href="/market"><Button variant="outline">Back</Button></Link>
@@ -53,5 +55,5 @@ const cover = computed(() => props.ad.images.find(i => i.is_cover) || props.ad.i
       </div>
     </div>
   </div>
+  </AppHeaderLayout>
 </template>
-

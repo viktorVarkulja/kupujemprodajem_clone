@@ -4,6 +4,7 @@ import { useForm, Link } from '@inertiajs/vue3'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import AppHeaderLayout from '@/layouts/app/AppHeaderLayout.vue'
 
 interface Category { id: number; name: string; slug: string; parent_id: number | null }
 const props = defineProps<{ categories: Category[] }>()
@@ -54,6 +55,7 @@ async function submit() {
 </script>
 
 <template>
+  <AppHeaderLayout>
   <div class="container mx-auto p-4 space-y-6 max-w-3xl">
     <div class="flex items-center justify-between">
       <h1 class="text-2xl font-semibold">Create Ad</h1>
@@ -139,4 +141,5 @@ async function submit() {
       </div>
     </div>
   </div>
+  </AppHeaderLayout>
 </template>

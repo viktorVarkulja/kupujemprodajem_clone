@@ -34,6 +34,8 @@ Route::get('/ads/{ad}', [AdController::class, 'show'])->name('ads.show');
 
 // Non-blocked aliases
 Route::get('/listings', [AdController::class, 'index'])->name('listings.index');
+// Place the create route BEFORE the dynamic parameter route to avoid conflicts
+Route::get('/listing/create', [AdPageController::class, 'create'])->middleware('auth')->name('listing.create');
 Route::get('/listing/{ad}', [AdController::class, 'show'])->name('listing.show');
 
 // Inertia pages for marketplace
@@ -42,5 +44,4 @@ Route::get('/ads/create', [AdPageController::class, 'create'])->middleware('auth
 Route::get('/ads/{ad:slug}/view', [AdPageController::class, 'show'])->name('ads.view');
 
 // Non-blocked page aliases
-Route::get('/listing/create', [AdPageController::class, 'create'])->middleware('auth')->name('listing.create');
 Route::get('/listing/{ad:slug}/view', [AdPageController::class, 'show'])->name('listing.view');

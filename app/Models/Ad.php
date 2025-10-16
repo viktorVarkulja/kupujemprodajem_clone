@@ -112,5 +112,9 @@ class Ad extends Model
         if (!$status) return $query;
         return $query->where('status', $status);
     }
-}
 
+    public function getRouteKeyName(): string
+    {
+        return 'slug';
+    }
+}

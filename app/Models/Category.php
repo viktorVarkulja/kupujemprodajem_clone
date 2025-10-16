@@ -41,5 +41,28 @@ class Category extends Model
     {
         return $this->hasMany(Ad::class);
     }
-}
 
+    public function descendantIds(): array
+    {
+        $ids = [$this->id];
+        $queue = [$this->id];
+        while (!empty($queue)) {
+            $current = array_shift($queue);
+            $children = static::query()->where('parent_id', $current)->pluck('id')->all();
+            foreach ($children as $childId) {
+                if (!in_array($childId, $ids, true)) {
+                    $ids[] = $childId;
+                    $queue[] = $childId;
+                }
+            }
+        }
+        return $ids;
+    }
+
+    public static function idsWithDescendants(int $categoryId): array
+    {
+        $category = static::query()->find($categoryId);
+        if (!$category) return [$categoryId];
+        return $category->descendantIds();
+    }
+}

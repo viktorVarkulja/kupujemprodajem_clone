@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, watch, onMounted, computed } from 'vue'
-import { Link } from '@inertiajs/vue3'
+import { Link, usePage } from '@inertiajs/vue3'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -22,7 +22,7 @@ type Ad = {
 
 const ads = ref<Ad[]>([])
 const loading = ref(false)
-const page = ref(1)
+const currentPage = ref(1)
 const lastPage = ref(1)
 
 const q = ref('')
@@ -45,6 +45,10 @@ const categoryOptions = computed(() => {
   return list
 })
 
+// Auth awareness
+const inertiaPage = usePage()
+const isAuth = computed(() => Boolean((inertiaPage.props as any)?.auth?.user))
+
 async function fetchAds() {
   loading.value = true
   try {
@@ -57,7 +61,7 @@ async function fetchAds() {
     if (city.value) params.set('city', city.value)
     if (condition.value) params.set('condition', condition.value)
     if (sort.value) params.set('sort', sort.value)
-    params.set('page', String(page.value))
+    params.set('page', String(currentPage.value))
     params.set('per_page', '12')
     const res = await fetch(`/listings?${params.toString()}`)
     const data = await res.json()
@@ -69,16 +73,29 @@ async function fetchAds() {
 }
 
 watch([q, category_id, price_min, price_max, currency, city, condition, sort], () => {
-  page.value = 1
+  currentPage.value = 1
   fetchAds()
 })
 
-watch(page, () => fetchAds())
+watch(currentPage, () => fetchAds())
 onMounted(() => fetchAds())
 </script>
 
 <template>
   <div class="container mx-auto p-4 space-y-6">
+    <div v-if="!isAuth" class="border rounded p-3 bg-amber-50 text-amber-900 flex items-center justify-between gap-3">
+      <div>
+        <div class="font-medium">Sign in to post your ad</div>
+        <div class="text-sm opacity-90">You need an account to create listings.</div>
+      </div>
+      <div class="flex gap-2">
+        <Link href="/login"><Button variant="outline">Log in</Button></Link>
+        <Link href="/register"><Button>Create account</Button></Link>
+      </div>
+    </div>
+    <Link v-else href="/logout" method="post" as="button">
+        <Button size="sm" variant="outline">Logout</Button>
+    </Link>
     <div class="flex items-center justify-between">
       <h1 class="text-2xl font-semibold">Marketplace</h1>
       <Link href="/listing/create">
@@ -163,9 +180,9 @@ onMounted(() => fetchAds())
     </div>
 
     <div class="flex items-center justify-center gap-2" v-if="lastPage > 1">
-      <Button variant="outline" :disabled="page <= 1" @click="page = page - 1">Prev</Button>
-      <span>Page {{ page }} / {{ lastPage }}</span>
-      <Button variant="outline" :disabled="page >= lastPage" @click="page = page + 1">Next</Button>
+      <Button variant="outline" :disabled="currentPage <= 1" @click="currentPage = currentPage - 1">Prev</Button>
+      <span>Page {{ currentPage }} / {{ lastPage }}</span>
+      <Button variant="outline" :disabled="currentPage >= lastPage" @click="currentPage = currentPage + 1">Next</Button>
     </div>
   </div>
 </template>

@@ -199,7 +199,7 @@ const rightNavItems: NavItem[] = [
                             />
                         </Button>
 
-                        <div class="hidden space-x-1 lg:flex">
+                        <div class="hidden space-x-1 lg:flex items-center">
                             <template
                                 v-for="item in rightNavItems"
                                 :key="item.title"
@@ -234,6 +234,16 @@ const rightNavItems: NavItem[] = [
                                     </Tooltip>
                                 </TooltipProvider>
                             </template>
+
+                            <!-- Create Ad shortcut (authenticated) -->
+                            <Link v-if="auth?.user" href="/listing/create">
+                                <Button size="sm">Create Ad</Button>
+                            </Link>
+
+                            <!-- Logout button (authenticated) -->
+                            <Link v-if="auth?.user" href="/logout" method="post" as="button">
+                                <Button size="sm" variant="outline">Logout</Button>
+                            </Link>
                         </div>
                     </div>
 

@@ -19,7 +19,7 @@ const siteName = computed(() => (page.props as any).name || 'Marketplace')
           <Link href="/listing/create">
             <Button size="sm">Create Ad</Button>
           </Link>
-          <Link href="/market">
+          <Link href="/my-listings">
             <Button size="sm" variant="outline">My Listings</Button>
           </Link>
           <Link href="/logout" method="post" as="button">
@@ -38,4 +38,3 @@ const siteName = computed(() => (page.props as any).name || 'Marketplace')
     </div>
   </header>
 </template>
-

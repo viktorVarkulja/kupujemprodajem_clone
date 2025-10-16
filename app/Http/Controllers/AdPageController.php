@@ -41,4 +41,30 @@ class AdPageController extends Controller
             'ad' => $ad,
         ]);
     }
+
+    public function myListings()
+    {
+        return Inertia::render('market/MyListings');
+    }
+
+    public function edit(Ad $ad)
+    {
+        $user = request()->user();
+        if (!$user || $user->id !== $ad->user_id) {
+            abort(403);
+        }
+
+        $categories = Category::query()
+            ->select(['id','name','slug','parent_id'])
+            ->orderBy('parent_id')
+            ->orderBy('name')
+            ->get();
+
+        $ad->load(['images', 'category']);
+
+        return Inertia::render('market/Edit', [
+            'ad' => $ad,
+            'categories' => $categories,
+        ]);
+    }
 }

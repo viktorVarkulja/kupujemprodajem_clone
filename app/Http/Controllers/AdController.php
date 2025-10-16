@@ -15,9 +15,27 @@ class AdController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Ad::query()
-            ->with(['category', 'coverImage'])
-            ->status('active');
+        $query = Ad::query()->with(['category', 'coverImage']);
+
+        $mine = $request->boolean('mine');
+        $requestedStatus = $request->string('status')->toString();
+
+        if ($mine) {
+            if (!$request->user()) {
+                abort(401);
+            }
+            $query->where('user_id', $request->user()->id);
+            if ($requestedStatus) {
+                $query->status($requestedStatus);
+            }
+        } else {
+            // Public listing defaults to active unless a status is specified
+            if ($requestedStatus) {
+                $query->status($requestedStatus);
+            } else {
+                $query->status('active');
+            }
+        }
 
         if ($search = $request->string('q')->toString()) {
             $query->search($search);
@@ -130,10 +148,11 @@ class AdController extends Controller
             abort(403);
         }
 
-        // Delete files
-        $dir = 'ads/'.$ad->id;
-        if (Storage::disk('public')->exists($dir)) {
-            Storage::disk('public')->deleteDirectory($dir);
+        // Delete files (support old 'ads' and new 'listings' paths)
+        foreach (['listings/'.$ad->id, 'ads/'.$ad->id] as $dir) {
+            if (Storage::disk('public')->exists($dir)) {
+                Storage::disk('public')->deleteDirectory($dir);
+            }
         }
 
         $ad->delete();
@@ -162,7 +181,8 @@ class AdController extends Controller
         if ($request->hasFile('images')) {
             $files = $request->file('images');
             foreach ($files as $index => $file) {
-                $path = $file->store('ads/'.$ad->id, 'public');
+                // Store under neutral folder to avoid ad-blockers
+                $path = $file->store('listings/'.$ad->id, 'public');
                 $ad->images()->create([
                     'path' => $path,
                     'is_cover' => false,

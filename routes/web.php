@@ -45,6 +45,8 @@ Route::get('/ads/{ad:slug}/view', [AdPageController::class, 'show'])->name('ads.
 
 // Non-blocked page aliases
 Route::get('/listing/{ad:slug}/view', [AdPageController::class, 'show'])->name('listing.view');
+Route::get('/my-listings', [AdPageController::class, 'myListings'])->middleware('auth')->name('listings.mine');
+Route::get('/listing/{ad:slug}/edit', [AdPageController::class, 'edit'])->middleware('auth')->name('listing.edit');
 
 // Media proxy to avoid ad-blockers on '/storage/ads/...'
 Route::get('/media/{image}', [\App\Http\Controllers\MediaController::class, 'show'])->name('media.show');

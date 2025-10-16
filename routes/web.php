@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use App\Http\Controllers\AdController;
+use App\Http\Controllers\AdPageController;
 
 Route::get('/', function () {
     return Inertia::render('Welcome');
@@ -24,3 +25,8 @@ Route::middleware('auth')->group(function () {
 
 Route::get('/ads', [AdController::class, 'index'])->name('ads.index');
 Route::get('/ads/{ad}', [AdController::class, 'show'])->name('ads.show');
+
+// Inertia pages for marketplace
+Route::get('/market', [AdPageController::class, 'index'])->name('market.index');
+Route::get('/ads/create', [AdPageController::class, 'create'])->middleware('auth')->name('ads.create');
+Route::get('/ads/{ad:slug}/view', [AdPageController::class, 'show'])->name('ads.view');

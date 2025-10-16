@@ -68,13 +68,13 @@ class AdController extends Controller
             $ad = Ad::create([
                 'user_id' => $user->id,
                 'category_id' => $request->integer('category_id'),
-                'title' => $request->string('title'),
-                'description' => $request->string('description'),
+                'title' => $request->string('title')->toString(),
+                'description' => $request->string('description')->toString(),
                 'price' => $request->input('price'),
-                'currency' => $request->string('currency', 'RSD'),
-                'city' => $request->string('city'),
-                'phone' => $request->string('phone'),
-                'condition' => $request->string('condition', 'used'),
+                'currency' => $request->string('currency')->toString() ?: 'RSD',
+                'city' => $request->string('city')->toString(),
+                'phone' => $request->string('phone')->toString(),
+                'condition' => $request->string('condition')->toString() ?: 'used',
                 'delivery_options' => $request->input('delivery_options'),
                 'is_negotiable' => (bool)$request->boolean('is_negotiable', false),
                 'status' => 'active',
@@ -97,15 +97,15 @@ class AdController extends Controller
 
         DB::transaction(function () use ($request, $ad) {
             $ad->update([
-                'category_id' => $request->integer('category_id', $ad->category_id),
-                'title' => $request->string('title', $ad->title),
-                'description' => $request->string('description', $ad->description),
-                'price' => $request->input('price', $ad->price),
-                'currency' => $request->string('currency', $ad->currency),
-                'city' => $request->string('city', $ad->city),
-                'phone' => $request->string('phone', $ad->phone),
-                'condition' => $request->string('condition', $ad->condition),
-                'delivery_options' => $request->input('delivery_options', $ad->delivery_options),
+                'category_id' => $request->has('category_id') ? $request->integer('category_id') : $ad->category_id,
+                'title' => $request->has('title') ? $request->string('title')->toString() : $ad->title,
+                'description' => $request->has('description') ? $request->string('description')->toString() : $ad->description,
+                'price' => $request->has('price') ? $request->input('price') : $ad->price,
+                'currency' => $request->has('currency') ? $request->string('currency')->toString() : $ad->currency,
+                'city' => $request->has('city') ? $request->string('city')->toString() : $ad->city,
+                'phone' => $request->has('phone') ? $request->string('phone')->toString() : $ad->phone,
+                'condition' => $request->has('condition') ? $request->string('condition')->toString() : $ad->condition,
+                'delivery_options' => $request->has('delivery_options') ? $request->input('delivery_options') : $ad->delivery_options,
                 'is_negotiable' => (bool)$request->boolean('is_negotiable', $ad->is_negotiable),
             ]);
 
@@ -188,4 +188,3 @@ class AdController extends Controller
         }
     }
 }
-

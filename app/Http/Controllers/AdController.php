@@ -191,7 +191,7 @@ class AdController extends Controller
             }
         }
 
-        // Set cover image
+        // Set cover image by ID or newly-uploaded index
         $coverImageId = $request->input('cover_image_id');
         if ($coverImageId) {
             $ad->images()->update(['is_cover' => false]);
@@ -199,6 +199,14 @@ class AdController extends Controller
             if ($cover) {
                 $cover->is_cover = true;
                 $cover->save();
+            }
+        } elseif ($request->filled('cover_image_index')) {
+            $index = max(1, (int)$request->input('cover_image_index'));
+            $candidate = $ad->images()->orderBy('position')->skip($index - 1)->take(1)->first();
+            if ($candidate) {
+                $ad->images()->update(['is_cover' => false]);
+                $candidate->is_cover = true;
+                $candidate->save();
             }
         } else {
             // Ensure exactly one cover exists

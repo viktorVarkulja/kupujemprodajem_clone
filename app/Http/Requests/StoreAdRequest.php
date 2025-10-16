@@ -29,8 +29,8 @@ class StoreAdRequest extends FormRequest
             'images' => ['nullable', 'array', 'max:10'],
             'images.*' => ['file', 'image', 'mimes:jpeg,jpg,png,webp', 'max:5120'],
             'cover_image_id' => ['nullable', 'integer'],
+            'cover_image_index' => ['nullable', 'integer', 'min:1'],
             'images_order' => ['nullable', 'array'],
         ];
     }
 }
-

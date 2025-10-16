@@ -28,6 +28,8 @@ const form = useForm({
   delivery_options: props.ad.delivery_options ?? [],
   is_negotiable: false,
   images: [] as File[],
+  remove_image_ids: [] as number[],
+  cover_image_id: (props.ad.images.find(i => i.is_cover)?.id ?? null) as number | null,
 })
 
 const errors = ref<Record<string, string[] | string>>({})
@@ -127,6 +129,23 @@ async function submit() {
           <Label for="images">Add Images</Label>
           <input id="images" type="file" accept="image/*" multiple @change="onFileChange" class="block w-full text-sm" />
           <div class="text-sm text-muted-foreground mt-1">Up to 10 images, max 5MB each.</div>
+        </div>
+
+        <div v-if="props.ad.images?.length" class="space-y-2">
+          <Label>Existing Images</Label>
+          <div class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-3">
+            <div v-for="img in props.ad.images" :key="img.id" class="border rounded p-2 space-y-2">
+              <img :src="`/media/${img.id}`" class="w-full h-24 object-cover rounded" alt="" />
+              <div class="flex items-center gap-2 text-sm">
+                <input type="checkbox" :value="img.id" v-model="form.remove_image_ids" id="rm-{{img.id}}" />
+                <Label :for="`rm-${img.id}`">Remove</Label>
+              </div>
+              <div class="flex items-center gap-2 text-sm">
+                <input type="radio" name="cover" :value="img.id" v-model="form.cover_image_id" :disabled="form.remove_image_ids.includes(img.id)" id="cv-{{img.id}}" />
+                <Label :for="`cv-${img.id}`">Cover</Label>
+              </div>
+            </div>
+          </div>
         </div>
 
         <div>

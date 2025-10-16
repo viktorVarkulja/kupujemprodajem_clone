@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {  ref } from 'vue'
+import {  ref, computed } from 'vue'
 import { useForm, Link } from '@inertiajs/vue3'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -21,6 +21,8 @@ const form = useForm({
   delivery_options: [] as string[],
   is_negotiable: false,
   images: [] as File[],
+  // cover by index (1-based on server)
+  cover_image_index: null as number | null,
 })
 
 const errors = ref<Record<string, string[] | string>>({})
@@ -30,6 +32,8 @@ function onFileChange(e: Event) {
   const input = e.target as HTMLInputElement
   if (input.files) {
     form.images = Array.from(input.files)
+    // default cover: first image
+    form.cover_image_index = form.images.length ? 1 : null
   }
 }
 
@@ -51,6 +55,20 @@ async function submit() {
       form.reset('title','description','category_id','price','currency','city','phone','condition','delivery_options','is_negotiable','images')
     }
   })
+}
+
+// Local previews and cover selection
+const previews = computed(() => form.images.map(f => ({ url: URL.createObjectURL(f), name: f.name })))
+function setCover(idx: number) {
+  form.cover_image_index = idx + 1
+}
+function removeSelected(idx: number) {
+  const files = [...form.images]
+  files.splice(idx, 1)
+  form.images = files
+  // Adjust cover if needed
+  if (!files.length) form.cover_image_index = null
+  else if (!form.cover_image_index || form.cover_image_index > files.length) form.cover_image_index = 1
 }
 </script>
 
@@ -134,6 +152,22 @@ async function submit() {
         <input id="images" type="file" accept="image/*" multiple @change="onFileChange" class="block w-full text-sm" />
         <div class="text-sm text-muted-foreground mt-1">Up to 10 images, max 5MB each.</div>
         <div v-if="errors.images" class="text-sm text-red-500">{{ errors.images }}</div>
+      </div>
+
+      <div v-if="previews.length" class="space-y-2">
+        <Label>Selected Images</Label>
+        <div class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-3">
+          <div v-for="(p, idx) in previews" :key="p.url" class="border rounded p-2 space-y-2">
+            <img :src="p.url" class="w-full h-24 object-cover rounded" alt="" />
+            <div class="flex items-center gap-2 text-sm">
+              <input type="radio" name="cover-new" :checked="form.cover_image_index === idx + 1" @change="setCover(idx)" :id="`cvn-${idx}`" />
+              <Label :for="`cvn-${idx}`">Cover</Label>
+            </div>
+            <div>
+              <Button variant="destructive" size="sm" @click.prevent="removeSelected(idx)">Remove</Button>
+            </div>
+          </div>
+        </div>
       </div>
 
       <div>

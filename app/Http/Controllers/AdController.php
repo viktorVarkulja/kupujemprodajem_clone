@@ -86,6 +86,12 @@ class AdController extends Controller
             return $ad;
         });
 
+        // If this is an Inertia form submission, redirect to the ad view page
+        if ($request->hasHeader('X-Inertia')) {
+            return redirect()->route('listing.view', ['ad' => $ad->slug])->with('success', 'Ad created');
+        }
+
+        // Otherwise, return JSON (API usage)
         return response()->json($ad->load(['images', 'category']), 201);
     }
 
@@ -112,6 +118,9 @@ class AdController extends Controller
             $this->syncImages($ad, $request);
         });
 
+        if ($request->hasHeader('X-Inertia')) {
+            return redirect()->route('listing.view', ['ad' => $ad->slug])->with('success', 'Ad updated');
+        }
         return response()->json($ad->load(['images', 'category']));
     }
 
@@ -129,6 +138,9 @@ class AdController extends Controller
 
         $ad->delete();
 
+        if ($request->hasHeader('X-Inertia')) {
+            return redirect()->route('market.index')->with('success', 'Ad deleted');
+        }
         return response()->noContent();
     }
 

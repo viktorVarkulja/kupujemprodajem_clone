@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, watch, onMounted, computed } from 'vue'
-import { Link, usePage } from '@inertiajs/vue3'
+import { Link } from '@inertiajs/vue3'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -45,10 +45,6 @@ const categoryOptions = computed(() => {
   }
   return list
 })
-
-// Auth awareness
-const inertiaPage = usePage()
-const isAuth = computed(() => Boolean((inertiaPage.props as any)?.auth?.user))
 
 async function fetchAds() {
   loading.value = true
@@ -155,7 +151,7 @@ onMounted(() => fetchAds())
       <div v-for="ad in ads" :key="ad.id" class="border rounded overflow-hidden hover:shadow">
         <Link :href="`/listing/${ad.slug}/view`">
           <div class="aspect-video bg-muted overflow-hidden">
-            <img v-if="ad.cover_image?.path" :src="`/storage/${ad.cover_image.path}`" class="w-full h-full object-cover" alt="" />
+            <img v-if="ad.cover_image?.id" :src="`/media/${ad.cover_image.id}`" class="w-full h-full object-cover" alt="" />
           </div>
           <div class="p-3 space-y-1">
             <div class="font-medium line-clamp-1">{{ ad.title }}</div>

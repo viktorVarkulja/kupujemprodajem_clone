@@ -45,3 +45,6 @@ Route::get('/ads/{ad:slug}/view', [AdPageController::class, 'show'])->name('ads.
 
 // Non-blocked page aliases
 Route::get('/listing/{ad:slug}/view', [AdPageController::class, 'show'])->name('listing.view');
+
+// Media proxy to avoid ad-blockers on '/storage/ads/...'
+Route::get('/media/{image}', [\App\Http\Controllers\MediaController::class, 'show'])->name('media.show');

@@ -28,10 +28,10 @@ const cover = computed(() => props.ad.images.find(i => i.is_cover) || props.ad.i
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
       <div class="md:col-span-2 space-y-4">
         <div class="aspect-video bg-muted overflow-hidden rounded">
-          <img v-if="cover" :src="`/storage/${cover.path}`" class="w-full h-full object-cover" alt="" />
+          <img v-if="cover" :src="`/media/${cover.id}`" class="w-full h-full object-cover" alt="" />
         </div>
         <div class="grid grid-cols-6 gap-2">
-          <img v-for="img in ad.images" :key="img.id" :src="`/storage/${img.path}`" class="h-16 w-full object-cover rounded" />
+          <img v-for="img in ad.images" :key="img.id" :src="`/media/${img.id}`" class="h-16 w-full object-cover rounded" />
         </div>
         <div>
           <h1 class="text-2xl font-semibold">{{ ad.title }}</h1>

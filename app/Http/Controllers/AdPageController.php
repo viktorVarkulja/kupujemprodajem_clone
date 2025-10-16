@@ -16,7 +16,7 @@ class AdPageController extends Controller
             ->orderBy('name')
             ->get();
 
-        return Inertia::render('ads/Index', [
+        return Inertia::render('market/Index', [
             'categories' => $categories,
         ]);
     }
@@ -29,7 +29,7 @@ class AdPageController extends Controller
             ->orderBy('name')
             ->get();
 
-        return Inertia::render('ads/Create', [
+        return Inertia::render('market/Create', [
             'categories' => $categories,
         ]);
     }
@@ -37,9 +37,8 @@ class AdPageController extends Controller
     public function show(Ad $ad)
     {
         $ad->load(['images', 'category']);
-        return Inertia::render('ads/Show', [
+        return Inertia::render('market/Show', [
             'ad' => $ad,
         ]);
     }
 }
-

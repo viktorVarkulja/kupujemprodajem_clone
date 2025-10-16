@@ -42,7 +42,7 @@ async function submit() {
   submitting.value = true
   errors.value = {}
   form.transform((data) => data)
-  form.post('/ads', {
+  form.post('/listings', {
     forceFormData: true,
     onError: (err) => { errors.value = err },
     onFinish: () => { submitting.value = false },

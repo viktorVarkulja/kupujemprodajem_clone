@@ -54,3 +54,4 @@ const cover = computed(() => props.ad.images.find(i => i.is_cover) || props.ad.i
     </div>
   </div>
 </template>
+

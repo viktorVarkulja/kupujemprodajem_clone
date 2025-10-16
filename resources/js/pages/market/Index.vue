@@ -59,7 +59,7 @@ async function fetchAds() {
     if (sort.value) params.set('sort', sort.value)
     params.set('page', String(page.value))
     params.set('per_page', '12')
-    const res = await fetch(`/ads?${params.toString()}`)
+    const res = await fetch(`/listings?${params.toString()}`)
     const data = await res.json()
     ads.value = data.data
     lastPage.value = data.last_page ?? 1
@@ -81,7 +81,7 @@ onMounted(() => fetchAds())
   <div class="container mx-auto p-4 space-y-6">
     <div class="flex items-center justify-between">
       <h1 class="text-2xl font-semibold">Marketplace</h1>
-      <Link href="/ads/create">
+      <Link href="/listing/create">
         <Button>Create Ad</Button>
       </Link>
     </div>
@@ -146,7 +146,7 @@ onMounted(() => fetchAds())
 
     <div v-else class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
       <div v-for="ad in ads" :key="ad.id" class="border rounded overflow-hidden hover:shadow">
-        <Link :href="`/ads/${ad.slug}/view`">
+        <Link :href="`/listing/${ad.slug}/view`">
           <div class="aspect-video bg-muted overflow-hidden">
             <img v-if="ad.cover_image?.path" :src="`/storage/${ad.cover_image.path}`" class="w-full h-full object-cover" alt="" />
           </div>

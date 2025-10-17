@@ -76,37 +76,37 @@ function removeSelected(idx: number) {
   <AppHeaderLayout>
   <div class="container mx-auto p-4 space-y-6 max-w-3xl">
     <div class="flex items-center justify-between">
-      <h1 class="text-2xl font-semibold">Create Ad</h1>
-      <Link href="/market"><Button variant="outline">Back</Button></Link>
+      <h1 class="text-2xl font-semibold">Kreiraj oglas</h1>
+      <Link href="/market"><Button variant="outline">Nazad</Button></Link>
     </div>
 
     <div class="grid gap-4">
       <div>
-        <Label for="title">Title</Label>
+        <Label for="title">Naslov</Label>
         <Input id="title" v-model="form.title" />
         <div v-if="errors.title" class="text-sm text-red-500">{{ errors.title }}</div>
       </div>
       <div>
-        <Label for="description">Description</Label>
+        <Label for="description">Opis</Label>
         <textarea id="description" v-model="form.description" class="w-full border rounded p-2 min-h-32" />
         <div v-if="errors.description" class="text-sm text-red-500">{{ errors.description }}</div>
       </div>
       <div>
-        <Label for="category">Category</Label>
+        <Label for="category">Kategorija</Label>
         <select id="category" v-model="form.category_id" class="w-full border rounded h-10 px-3 text-sm">
-          <option value="">Select category</option>
+          <option value="">Izaberite kategoriju</option>
           <option v-for="c in props.categories" :key="c.id" :value="c.id">{{ categoryLabel(c) }}</option>
         </select>
         <div v-if="errors.category_id" class="text-sm text-red-500">{{ errors.category_id }}</div>
       </div>
       <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
         <div>
-          <Label>Price</Label>
+          <Label>Cena</Label>
           <Input v-model="form.price" type="number" min="0" step="0.01" />
           <div v-if="errors.price" class="text-sm text-red-500">{{ errors.price }}</div>
         </div>
         <div>
-          <Label>Currency</Label>
+          <Label>Valuta</Label>
           <select v-model="form.currency" class="w-full border rounded h-10 px-3 text-sm">
             <option value="RSD">RSD</option>
             <option value="EUR">EUR</option>
@@ -115,63 +115,63 @@ function removeSelected(idx: number) {
         </div>
         <div class="flex items-center gap-2 mt-6">
           <input id="neg" type="checkbox" v-model="form.is_negotiable" class="h-4 w-4" />
-          <Label for="neg">Negotiable</Label>
+          <Label for="neg">Po dogovoru</Label>
         </div>
       </div>
       <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
         <div>
-          <Label>City</Label>
-          <Input v-model="form.city" placeholder="Belgrade" />
+          <Label>Grad</Label>
+          <Input v-model="form.city" placeholder="Beograd" />
         </div>
         <div>
-          <Label>Phone</Label>
+          <Label>Telefon</Label>
           <Input v-model="form.phone" placeholder="06x xxx xxxx" />
         </div>
         <div>
-          <Label>Condition</Label>
+          <Label>Stanje</Label>
           <select v-model="form.condition" class="w-full border rounded h-10 px-3 text-sm">
-            <option value="new">New</option>
-            <option value="like_new">Like new</option>
-            <option value="used">Used</option>
-            <option value="for_parts">For parts</option>
+            <option value="new">Novo</option>
+            <option value="like_new">Kao novo</option>
+            <option value="used">Polovno</option>
+            <option value="for_parts">Za delove</option>
           </select>
         </div>
       </div>
 
       <div>
-        <Label>Delivery options</Label>
+        <Label>Način isporuke</Label>
         <div class="flex flex-wrap gap-4 mt-2">
-          <label class="inline-flex items-center gap-2"><input type="checkbox" value="pickup" v-model="form.delivery_options" /> Pickup</label>
-          <label class="inline-flex items-center gap-2"><input type="checkbox" value="courier" v-model="form.delivery_options" /> Courier</label>
-          <label class="inline-flex items-center gap-2"><input type="checkbox" value="cod" v-model="form.delivery_options" /> Cash on delivery</label>
+          <label class="inline-flex items-center gap-2"><input type="checkbox" value="pickup" v-model="form.delivery_options" /> Preuzimanje lično</label>
+          <label class="inline-flex items-center gap-2"><input type="checkbox" value="courier" v-model="form.delivery_options" /> Kurirska služba</label>
+          <label class="inline-flex items-center gap-2"><input type="checkbox" value="cod" v-model="form.delivery_options" /> Plaćanje pouzećem</label>
         </div>
       </div>
 
       <div>
-        <Label for="images">Images</Label>
+        <Label for="images">Slike</Label>
         <input id="images" type="file" accept="image/*" multiple @change="onFileChange" class="block w-full text-sm" />
-        <div class="text-sm text-muted-foreground mt-1">Up to 10 images, max 5MB each.</div>
+        <div class="text-sm text-muted-foreground mt-1">Do 10 slika, max 5MB po slici.</div>
         <div v-if="errors.images" class="text-sm text-red-500">{{ errors.images }}</div>
       </div>
 
       <div v-if="previews.length" class="space-y-2">
-        <Label>Selected Images</Label>
+        <Label>Izabrane slike</Label>
         <div class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-3">
           <div v-for="(p, idx) in previews" :key="p.url" class="border rounded p-2 space-y-2">
             <img :src="p.url" class="w-full h-24 object-cover rounded" alt="" />
             <div class="flex items-center gap-2 text-sm">
               <input type="radio" name="cover-new" :checked="form.cover_image_index === idx + 1" @change="setCover(idx)" :id="`cvn-${idx}`" />
-              <Label :for="`cvn-${idx}`">Cover</Label>
+              <Label :for="`cvn-${idx}`">Naslovna</Label>
             </div>
             <div>
-              <Button variant="destructive" size="sm" @click.prevent="removeSelected(idx)">Remove</Button>
+              <Button variant="destructive" size="sm" @click.prevent="removeSelected(idx)">Ukloni</Button>
             </div>
           </div>
         </div>
       </div>
 
       <div>
-        <Button :disabled="submitting" @click="submit">Publish</Button>
+        <Button :disabled="submitting" @click="submit">Objavi</Button>
       </div>
     </div>
   </div>

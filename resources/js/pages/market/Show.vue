@@ -87,7 +87,7 @@ onBeforeUnmount(() => window.removeEventListener('keydown', onKey))
   <AppHeaderLayout>
   <div class="container mx-auto p-4 space-y-6 max-w-5xl">
     <div class="flex items-center justify-between">
-      <Link href="/market"><Button variant="outline">Back</Button></Link>
+      <Link href="/market"><Button variant="outline">Nazad</Button></Link>
       <div class="text-sm text-muted-foreground">{{ ad.category?.name }}</div>
     </div>
 
@@ -98,7 +98,7 @@ onBeforeUnmount(() => window.removeEventListener('keydown', onKey))
             v-if="cover"
             :src="`/media/${cover.id}`"
             class="w-full h-full object-contain cursor-zoom-in select-none"
-            alt="Selected image"
+            alt="Izabrana slika"
             @click="openZoom"
             draggable="false"
           />
@@ -107,13 +107,13 @@ onBeforeUnmount(() => window.removeEventListener('keydown', onKey))
             type="button"
             class="absolute inset-y-0 left-0 px-3 text-2xl text-white/90 hover:text-white bg-black/20 hover:bg-black/30 transition flex items-center"
             @click.stop="prevImage"
-            aria-label="Previous image"
+            aria-label="Prethodna slika"
           >‹</button>
           <button
             type="button"
             class="absolute inset-y-0 right-0 px-3 text-2xl text-white/90 hover:text-white bg-black/20 hover:bg-black/30 transition flex items-center"
             @click.stop="nextImage"
-            aria-label="Next image"
+            aria-label="Sledeća slika"
           >›</button>
         </div>
         <div class="grid grid-cols-6 gap-2">
@@ -126,7 +126,7 @@ onBeforeUnmount(() => window.removeEventListener('keydown', onKey))
               'h-16 w-full object-cover rounded cursor-pointer transition ring-1',
               cover && cover.id === img.id ? 'ring-primary' : 'ring-transparent hover:ring-primary/50'
             ]"
-            alt="Thumbnail"
+            alt="Sličica"
           />
         </div>
         <div>
@@ -137,15 +137,15 @@ onBeforeUnmount(() => window.removeEventListener('keydown', onKey))
       <div class="space-y-4">
         <div class="border rounded p-4 space-y-2">
           <div class="text-2xl font-bold">{{ Number(ad.price).toLocaleString() }} {{ ad.currency }}</div>
-          <div class="text-muted-foreground">Condition: {{ ad.condition }}</div>
-          <div class="text-muted-foreground">City: {{ ad.city }}</div>
-          <div class="text-muted-foreground" v-if="ad.delivery_options?.length">Delivery: {{ ad.delivery_options.join(', ') }}</div>
+          <div class="text-muted-foreground">Stanje: {{ ad.condition }}</div>
+          <div class="text-muted-foreground">Grad: {{ ad.city }}</div>
+          <div class="text-muted-foreground" v-if="ad.delivery_options?.length">Isporuka: {{ ad.delivery_options.join(', ') }}</div>
         </div>
         <div class="border rounded p-4 space-y-2">
-          <div class="font-medium">Contact</div>
+          <div class="font-medium">Kontakt</div>
           <div>Phone: <span class="font-mono">{{ ad.phone || '—' }}</span></div>
           <Button as-child>
-            <a :href="ad.phone ? `tel:${ad.phone}` : '#'" :aria-disabled="!ad.phone">Call Seller</a>
+            <a :href="ad.phone ? `tel:${ad.phone}` : '#'" :aria-disabled="!ad.phone">Pozovi prodavca</a>
           </Button>
         </div>
       </div>
@@ -157,12 +157,12 @@ onBeforeUnmount(() => window.removeEventListener('keydown', onKey))
   <div v-if="isZoomOpen" class="fixed inset-0 z-50 bg-black/90">
     <div class="absolute inset-0 flex flex-col">
       <div class="flex items-center justify-between p-3">
-        <div class="text-white/80 text-sm">Use mouse wheel to zoom; drag to pan</div>
+        <div class="text-white/80 text-sm">Zumirajte točkićem miša; prevlačenjem pomerajte</div>
         <div class="flex items-center gap-2">
-          <button class="px-3 py-1 rounded bg-white/10 text-white hover:bg-white/20" @click="zoomOut()" aria-label="Zoom out">-</button>
-          <button class="px-3 py-1 rounded bg-white/10 text-white hover:bg-white/20" @click="resetZoom()" aria-label="Reset zoom">100%</button>
-          <button class="px-3 py-1 rounded bg-white/10 text-white hover:bg-white/20" @click="zoomIn()" aria-label="Zoom in">+</button>
-          <button class="ml-2 px-3 py-1 rounded bg-white/10 text-white hover:bg-white/20" @click="closeZoom" aria-label="Close">✕</button>
+          <button class="px-3 py-1 rounded bg-white/10 text-white hover:bg-white/20" @click="zoomOut()" aria-label="Umanji">-</button>
+          <button class="px-3 py-1 rounded bg-white/10 text-white hover:bg-white/20" @click="resetZoom()" aria-label="Resetuj zum">100%</button>
+          <button class="px-3 py-1 rounded bg-white/10 text-white hover:bg-white/20" @click="zoomIn()" aria-label="Uvećaj">+</button>
+          <button class="ml-2 px-3 py-1 rounded bg-white/10 text-white hover:bg-white/20" @click="closeZoom" aria-label="Zatvori">✕</button>
         </div>
       </div>
       <div class="relative flex-1 overflow-hidden select-none">
@@ -181,7 +181,7 @@ onBeforeUnmount(() => window.removeEventListener('keydown', onKey))
             :style="{
               transform: `translate(calc(-50% + ${translateX}px), calc(-50% + ${translateY}px)) scale(${scale})`
             }"
-            alt="Zoomed image"
+            alt="Uvećana slika"
             draggable="false"
           />
         </div>
@@ -199,7 +199,7 @@ onBeforeUnmount(() => window.removeEventListener('keydown', onKey))
           aria-label="Next image"
         >›</button>
       </div>
-      <div class="p-3 text-center text-white/70 text-sm">Image {{ currentIndex + 1 }} / {{ ad.images.length }}</div>
+      <div class="p-3 text-center text-white/70 text-sm">Slika {{ currentIndex + 1 }} / {{ ad.images.length }}</div>
     </div>
   </div>
 </template>

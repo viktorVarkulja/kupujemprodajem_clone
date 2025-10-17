@@ -64,23 +64,23 @@ async function submit() {
   <AppHeaderLayout>
     <div class="container mx-auto p-4 space-y-6 max-w-3xl">
       <div class="flex items-center justify-between">
-        <h1 class="text-2xl font-semibold">Edit Ad</h1>
-        <Link :href="`/listing/${props.ad.slug}/view`"><Button variant="outline">Back</Button></Link>
+        <h1 class="text-2xl font-semibold">Uredi oglas</h1>
+        <Link :href="`/listing/${props.ad.slug}/view`"><Button variant="outline">Nazad</Button></Link>
       </div>
 
       <div class="grid gap-4">
         <div>
-          <Label for="title">Title</Label>
+          <Label for="title">Naslov</Label>
           <Input id="title" v-model="form.title" />
           <div v-if="errors.title" class="text-sm text-red-500">{{ errors.title }}</div>
         </div>
         <div>
-          <Label for="description">Description</Label>
+          <Label for="description">Opis</Label>
           <textarea id="description" v-model="form.description" class="w-full border rounded p-2 min-h-32" />
           <div v-if="errors.description" class="text-sm text-red-500">{{ errors.description }}</div>
         </div>
         <div>
-          <Label for="category">Category</Label>
+          <Label for="category">Kategorija</Label>
           <select id="category" v-model="form.category_id" class="w-full border rounded h-10 px-3 text-sm">
             <option v-for="c in props.categories" :key="c.id" :value="c.id">{{ categoryLabel(c) }}</option>
           </select>
@@ -88,12 +88,12 @@ async function submit() {
         </div>
         <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
           <div>
-            <Label>Price</Label>
+            <Label>Cena</Label>
             <Input v-model="form.price" type="number" min="0" step="0.01" />
             <div v-if="errors.price" class="text-sm text-red-500">{{ errors.price }}</div>
           </div>
           <div>
-            <Label>Currency</Label>
+            <Label>Valuta</Label>
             <select v-model="form.currency" class="w-full border rounded h-10 px-3 text-sm">
               <option value="RSD">RSD</option>
               <option value="EUR">EUR</option>
@@ -102,54 +102,54 @@ async function submit() {
           </div>
           <div class="flex items-center gap-2 mt-6">
             <input id="neg" type="checkbox" v-model="form.is_negotiable" class="h-4 w-4" />
-            <Label for="neg">Negotiable</Label>
+            <Label for="neg">Po dogovoru</Label>
           </div>
         </div>
         <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
           <div>
-            <Label>City</Label>
-            <Input v-model="form.city" placeholder="Belgrade" />
+            <Label>Grad</Label>
+            <Input v-model="form.city" placeholder="Beograd" />
           </div>
           <div>
-            <Label>Phone</Label>
+            <Label>Telefon</Label>
             <Input v-model="form.phone" placeholder="06x xxx xxxx" />
           </div>
           <div>
-            <Label>Condition</Label>
+            <Label>Stanje</Label>
             <select v-model="form.condition" class="w-full border rounded h-10 px-3 text-sm">
-              <option value="new">New</option>
-              <option value="like_new">Like new</option>
-              <option value="used">Used</option>
-              <option value="for_parts">For parts</option>
+              <option value="new">Novo</option>
+              <option value="like_new">Kao novo</option>
+              <option value="used">Polovno</option>
+              <option value="for_parts">Za delove</option>
             </select>
           </div>
         </div>
 
         <div>
-          <Label for="images">Add Images</Label>
+          <Label for="images">Dodaj slike</Label>
           <input id="images" type="file" accept="image/*" multiple @change="onFileChange" class="block w-full text-sm" />
-          <div class="text-sm text-muted-foreground mt-1">Up to 10 images, max 5MB each.</div>
+          <div class="text-sm text-muted-foreground mt-1">Do 10 slika, max 5MB po slici.</div>
         </div>
 
         <div v-if="props.ad.images?.length" class="space-y-2">
-          <Label>Existing Images</Label>
+          <Label>Postojeće slike</Label>
           <div class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-3">
             <div v-for="img in props.ad.images" :key="img.id" class="border rounded p-2 space-y-2">
               <img :src="`/media/${img.id}`" class="w-full h-24 object-cover rounded" alt="" />
               <div class="flex items-center gap-2 text-sm">
                 <input type="checkbox" :value="img.id" v-model="form.remove_image_ids" id="rm-{{img.id}}" />
-                <Label :for="`rm-${img.id}`">Remove</Label>
+                <Label :for="`rm-${img.id}`">Ukloni</Label>
               </div>
               <div class="flex items-center gap-2 text-sm">
                 <input type="radio" name="cover" :value="img.id" v-model="form.cover_image_id" :disabled="form.remove_image_ids.includes(img.id)" id="cv-{{img.id}}" />
-                <Label :for="`cv-${img.id}`">Cover</Label>
+                <Label :for="`cv-${img.id}`">Naslovna</Label>
               </div>
             </div>
           </div>
         </div>
 
         <div>
-          <Button :disabled="submitting" @click="submit">Save Changes</Button>
+          <Button :disabled="submitting" @click="submit">Sačuvaj izmene</Button>
         </div>
       </div>
     </div>

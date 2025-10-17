@@ -31,7 +31,7 @@ async function fetchMine() {
 }
 
 function destroyAd(slug: string) {
-  if (!confirm('Delete this listing?')) return
+  if (!confirm('Obrisati ovaj oglas?')) return
   router.delete(`/listings/${slug}`, {
     preserveScroll: true,
     onSuccess: () => fetchMine(),
@@ -45,12 +45,12 @@ onMounted(fetchMine)
   <AppHeaderLayout>
     <div class="container mx-auto p-4 space-y-6">
       <div class="flex items-center justify-between">
-        <h1 class="text-2xl font-semibold">My Listings</h1>
-        <Link href="/listing/create"><Button>Create Ad</Button></Link>
+        <h1 class="text-2xl font-semibold">Moji oglasi</h1>
+        <Link href="/listing/create"><Button>Kreiraj oglas</Button></Link>
       </div>
 
-      <div v-if="loading">Loading...</div>
-      <div v-else-if="ads.length === 0" class="text-sm text-muted-foreground">You have no listings yet.</div>
+      <div v-if="loading">Učitavanje...</div>
+      <div v-else-if="ads.length === 0" class="text-sm text-muted-foreground">Nemate još nijedan oglas.</div>
 
       <div v-else class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
         <div v-for="ad in ads" :key="ad.id" class="border rounded overflow-hidden">
@@ -67,9 +67,9 @@ onMounted(fetchMine)
               <div class="text-muted-foreground">{{ ad.city }}</div>
             </div>
             <div class="flex gap-2 pt-2">
-              <Link :href="`/listing/${ad.slug}/view`"><Button size="sm" variant="outline">View</Button></Link>
-              <Link :href="`/listing/${ad.slug}/edit`"><Button size="sm">Edit</Button></Link>
-              <Button size="sm" variant="destructive" @click="destroyAd(ad.slug)">Delete</Button>
+              <Link :href="`/listing/${ad.slug}/view`"><Button size="sm" variant="outline">Pogledaj</Button></Link>
+              <Link :href="`/listing/${ad.slug}/edit`"><Button size="sm">Uredi</Button></Link>
+              <Button size="sm" variant="destructive" @click="destroyAd(ad.slug)">Obriši</Button>
             </div>
           </div>
         </div>

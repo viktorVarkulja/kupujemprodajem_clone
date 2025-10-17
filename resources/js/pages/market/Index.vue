@@ -83,69 +83,69 @@ onMounted(() => fetchAds())
   <div class="container mx-auto p-4 space-y-6">
 
     <div class="flex items-center justify-between">
-      <h1 class="text-2xl font-semibold">Marketplace</h1>
+      <h1 class="text-2xl font-semibold">Oglasi</h1>
       <Link href="/listing/create">
-        <Button>Create Ad</Button>
+        <Button>Kreiraj oglas</Button>
       </Link>
     </div>
 
     <div class="grid grid-cols-1 md:grid-cols-6 gap-4 items-end">
       <div class="md:col-span-2">
-        <Label for="q">Search</Label>
-        <Input id="q" v-model="q" placeholder="Search title or description" />
+        <Label for="q">Pretraga</Label>
+        <Input id="q" v-model="q" placeholder="Pretraži naslov ili opis" />
       </div>
       <div>
-        <Label for="category">Category</Label>
+        <Label for="category">Kategorija</Label>
         <select id="category" v-model="category_id" class="w-full border rounded h-10 px-3 text-sm">
-          <option value="">All</option>
+          <option value="">Sve</option>
           <option v-for="opt in categoryOptions" :key="opt.id" :value="opt.id">{{ opt.label }}</option>
         </select>
       </div>
       <div>
-        <Label for="currency">Currency</Label>
+        <Label for="currency">Valuta</Label>
         <select id="currency" v-model="currency" class="w-full border rounded h-10 px-3 text-sm">
-          <option value="">Any</option>
+          <option value="">Bilo koja</option>
           <option value="RSD">RSD</option>
           <option value="EUR">EUR</option>
           <option value="USD">USD</option>
         </select>
       </div>
       <div>
-        <Label>Price Min</Label>
+        <Label>Minimalna cena</Label>
         <Input v-model="price_min" placeholder="0" />
       </div>
       <div>
-        <Label>Price Max</Label>
+        <Label>Maksimalna cena</Label>
         <Input v-model="price_max" placeholder="" />
       </div>
       <div>
-        <Label>City</Label>
-        <Input v-model="city" placeholder="Belgrade" />
+        <Label>Grad</Label>
+        <Input v-model="city" placeholder="Beograd" />
       </div>
       <div>
-        <Label>Condition</Label>
+        <Label>Stanje</Label>
         <select v-model="condition" class="w-full border rounded h-10 px-3 text-sm">
-          <option value="">Any</option>
-          <option value="new">New</option>
-          <option value="like_new">Like new</option>
-          <option value="used">Used</option>
-          <option value="for_parts">For parts</option>
+          <option value="">Bilo koje</option>
+          <option value="new">Novo</option>
+          <option value="like_new">Kao novo</option>
+          <option value="used">Polovno</option>
+          <option value="for_parts">Za delove</option>
         </select>
       </div>
       <div>
-        <Label>Sort</Label>
+        <Label>Sortiranje</Label>
         <select v-model="sort" class="w-full border rounded h-10 px-3 text-sm">
-          <option value="">Newest</option>
-          <option value="price_asc">Price: Low to High</option>
-          <option value="price_desc">Price: High to Low</option>
+          <option value="">Najnovije</option>
+          <option value="price_asc">Cena: rastuće</option>
+          <option value="price_desc">Cena: opadajuće</option>
         </select>
       </div>
       <div class="md:col-span-6">
-        <Button :disabled="loading" @click="fetchAds">Apply</Button>
+        <Button :disabled="loading" @click="fetchAds">Primeni</Button>
       </div>
     </div>
 
-    <div v-if="loading">Loading...</div>
+    <div v-if="loading">Učitavanje...</div>
 
     <div v-else class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
       <div v-for="ad in ads" :key="ad.id" class="border rounded overflow-hidden hover:shadow">
@@ -166,9 +166,9 @@ onMounted(() => fetchAds())
     </div>
 
     <div class="flex items-center justify-center gap-2" v-if="lastPage > 1">
-      <Button variant="outline" :disabled="currentPage <= 1" @click="currentPage = currentPage - 1">Prev</Button>
-      <span>Page {{ currentPage }} / {{ lastPage }}</span>
-      <Button variant="outline" :disabled="currentPage >= lastPage" @click="currentPage = currentPage + 1">Next</Button>
+      <Button variant="outline" :disabled="currentPage <= 1" @click="currentPage = currentPage - 1">Prethodna</Button>
+      <span>Strana {{ currentPage }} / {{ lastPage }}</span>
+      <Button variant="outline" :disabled="currentPage >= lastPage" @click="currentPage = currentPage + 1">Sledeća</Button>
     </div>
   </div>
   </AppHeaderLayout>

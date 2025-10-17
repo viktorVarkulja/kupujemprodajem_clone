@@ -1,25 +1,105 @@
-# Laravel + Vue Starter Kit
+# KupujemProdajem Clone (Laravel + Vue + Inertia)
 
-## Introduction
+Simple marketplace prototype built on Laravel 12, Vue 3, Inertia, Vite, Tailwind.
 
-Our Vue starter kit provides a robust, modern starting point for building Laravel applications with a Vue frontend using [Inertia](https://inertiajs.com).
+- Backend: Laravel 12 (PHP 8.2+)
+- Frontend: Vue 3 + TypeScript via Inertia + Vite
+- Auth: Laravel Fortify
+- Styling: Tailwind CSS
 
-Inertia allows you to build modern, single-page Vue applications using classic server-side routing and controllers. This lets you enjoy the frontend power of Vue combined with the incredible backend productivity of Laravel and lightning-fast Vite compilation.
+## Prerequisites
 
-This Vue starter kit utilizes Vue 3 and the Composition API, TypeScript, Tailwind, and the [shadcn-vue](https://www.shadcn-vue.com) component library.
+- PHP 8.2+
+- Composer
+- Node.js 18+ and npm (or yarn/pnpm)
+- SQLite (recommended for quick start) or MySQL
 
-## Official Documentation
+Optional:
+- Docker with Laravel Sail
 
-Documentation for all Laravel starter kits can be found on the [Laravel website](https://laravel.com/docs/starter-kits).
+## Quick Start (SQLite)
 
-## Contributing
+Run these from the project root:
 
-Thank you for considering contributing to our starter kit! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+1) Install PHP deps and create `.env`
 
-## Code of Conduct
+```
+composer install
+cp .env.example .env   # PowerShell: copy .env.example .env
+php artisan key:generate
+```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+2) Use SQLite (fastest):
 
-## License
+```
+# PowerShell (Windows)
+New-Item -ItemType File -Force database/database.sqlite | Out-Null
 
-The Laravel + Vue starter kit is open-sourced software licensed under the MIT license.
+# Bash (macOS/Linux)
+mkdir -p database && : > database/database.sqlite
+
+# In .env set:
+DB_CONNECTION=sqlite
+DB_DATABASE=database/database.sqlite
+```
+
+3) Migrate and seed sample data (categories + demo user):
+
+```
+php artisan migrate --seed
+```
+
+4) Install JS deps:
+
+```
+npm install
+```
+
+5) Start the app (two options)
+
+- One command (concurrent server + queue + Vite):
+
+```
+composer run dev
+```
+
+- Or run separately in two terminals:
+
+```
+php artisan serve            # http://127.0.0.1:8000
+npm run dev                  # Vite dev server
+```
+
+Visit http://127.0.0.1:8000 and open the Market section.
+
+## Optional: Server‑Side Rendering (SSR)
+
+Build and run with SSR + live logs/pail:
+
+```
+npm run build:ssr
+composer run dev:ssr
+```
+
+Keyboard: use ←/→ to switch images and Esc to exit zoom in the ad detail view.
+
+## Environment Notes
+
+- Set `APP_URL` in `.env` if running behind a different host/port.
+- For databases other than SQLite, update `DB_*` variables and create the database before `migrate`.
+
+## Testing
+
+```
+composer run test
+# or
+php artisan test
+```
+
+## Production Build
+
+```
+npm run build
+```
+
+Serve via your web server (Nginx/Apache). Ensure `APP_ENV=production`, `APP_DEBUG=false` and proper cache/queue setup as needed.

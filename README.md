@@ -72,34 +72,9 @@ npm run dev                  # Vite dev server
 
 Visit http://127.0.0.1:8000 and open the Market section.
 
-## Optional: Server‑Side Rendering (SSR)
-
-Build and run with SSR + live logs/pail:
-
-```
-npm run build:ssr
-composer run dev:ssr
-```
-
-Keyboard: use ←/→ to switch images and Esc to exit zoom in the ad detail view.
-
 ## Environment Notes
 
 - Set `APP_URL` in `.env` if running behind a different host/port.
 - For databases other than SQLite, update `DB_*` variables and create the database before `migrate`.
-
-## Testing
-
-```
-composer run test
-# or
-php artisan test
-```
-
-## Production Build
-
-```
-npm run build
-```
 
 Serve via your web server (Nginx/Apache). Ensure `APP_ENV=production`, `APP_DEBUG=false` and proper cache/queue setup as needed.

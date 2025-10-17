@@ -14,9 +14,6 @@ Simple marketplace prototype built on Laravel 12, Vue 3, Inertia, Vite, Tailwind
 - Node.js 18+ and npm (or yarn/pnpm)
 - SQLite (recommended for quick start) or MySQL
 
-Optional:
-- Docker with Laravel Sail
-
 ## Quick Start (SQLite)
 
 Run these from the project root:

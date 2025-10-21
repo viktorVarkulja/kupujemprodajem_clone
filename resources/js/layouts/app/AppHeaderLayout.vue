@@ -16,6 +16,7 @@ withDefaults(defineProps<Props>(), {
 
 const page = usePage();
 const flash = computed(() => (page.props as any).flash || {});
+import ToastBar from "@/components/ToastBar.vue";
 </script>
 
 <template>
@@ -30,5 +31,7 @@ const flash = computed(() => (page.props as any).flash || {});
         <AppContent>
             <slot />
         </AppContent>
+        <ToastBar />
     </AppShell>
 </template>
+

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, ref, onMounted, onBeforeUnmount } from 'vue'
-import { Link } from '@inertiajs/vue3'
+import { Link, usePage } from '@inertiajs/vue3'
 import { Button } from '@/components/ui/button'
 import AppHeaderLayout from '@/layouts/app/AppHeaderLayout.vue'
 
@@ -14,6 +14,12 @@ type Ad = {
 }
 
 const props = defineProps<{ ad: Ad }>()
+const page = usePage()
+const isOwner = computed(() => {
+  const auth = (page.props as any).auth
+  return !!(auth?.user && props.ad?.user && auth.user.id === props.ad.user.id)
+})
+const isLoggedIn = computed(() => !!(page.props as any)?.auth?.user)
 
 // Serbian labels for enums shown in detailed view
 const conditionLabels: Record<string, string> = {
@@ -103,7 +109,7 @@ onBeforeUnmount(() => window.removeEventListener('keydown', onKey))
 const showMessage = ref(false)
 const messageBody = ref('')
 const sending = ref(false)
-const csrf = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || ''
+const getCsrf = () => document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || ''
 
 async function sendMessage() {
   if (!props.ad?.user) return
@@ -113,7 +119,7 @@ async function sendMessage() {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'X-CSRF-TOKEN': csrf,
+        'X-CSRF-TOKEN': getCsrf(),
         'X-Requested-With': 'XMLHttpRequest',
         'Accept': 'application/json',
       },
@@ -124,16 +130,28 @@ async function sendMessage() {
       }),
       credentials: 'same-origin',
     })
+    if (res.status === 419) throw new Error('CSRF')
     if (!res.ok) throw new Error('Greška pri slanju poruke')
     messageBody.value = ''
     showMessage.value = false
-    alert('Razgovor započet. Poruka poslata.')
+    window.dispatchEvent(new CustomEvent('toast', { detail: { message: 'Razgovor započet. Poruka poslata.', type: 'success' } }))
   } catch (err) {
     console.error(err)
-    alert('Nije moguće poslati poruku.')
+    const msg = (err as any)?.message === 'CSRF' ? 'Sesija je istekla. Osvežite stranicu pa pokušajte ponovo.' : 'Nije moguće poslati poruku.'
+    window.dispatchEvent(new CustomEvent('toast', { detail: { message: msg, type: 'error' } }))
   } finally {
     sending.value = false
   }
+}
+
+function toggleMessage() {
+  if (!isLoggedIn.value) {
+    // Redirect to login, preserving return
+    const back = window.location.pathname + window.location.search
+    window.location.href = `/login?redirect=${encodeURIComponent(back)}`
+    return
+  }
+  showMessage.value = !showMessage.value
 }
 </script>
 
@@ -202,10 +220,10 @@ async function sendMessage() {
           <Button as-child>
             <a :href="ad.phone ? `tel:${ad.phone}` : '#'" :aria-disabled="!ad.phone">Pozovi prodavca</a>
           </Button>
-          <div class="pt-2">
-            <Button variant="secondary" @click="showMessage = !showMessage">Pošalji poruku prodavcu</Button>
+          <div v-if="!isOwner" class="pt-2">
+            <Button variant="secondary" @click="toggleMessage">Pošalji poruku prodavcu</Button>
           </div>
-          <div v-if="showMessage" class="space-y-2 pt-2">
+          <div v-if="!isOwner && showMessage" class="space-y-2 pt-2">
             <textarea
               v-model="messageBody"
               class="w-full border rounded p-2 text-sm min-h-24"

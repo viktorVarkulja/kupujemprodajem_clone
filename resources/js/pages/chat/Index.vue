@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, onMounted, computed, nextTick } from 'vue'
-import { Link } from '@inertiajs/vue3'
+import { Link, usePage } from '@inertiajs/vue3'
 import AppHeaderLayout from '@/layouts/app/AppHeaderLayout.vue'
 import { Button } from '@/components/ui/button'
 
@@ -18,6 +18,13 @@ const selected = ref<Conversation | null>(null)
 const messages = ref<Message[]>([])
 const msgBody = ref('')
 const sending = ref(false)
+
+// Current user for styling own messages
+const page = usePage()
+const currentUserId = computed<number | null>(() => {
+  const auth = (page.props as any).auth
+  return auth?.user?.id ?? null
+})
 
 const fmtTime = (iso: string) => {
   const d = new Date(iso)
@@ -52,6 +59,7 @@ async function openConversation(c: Conversation) {
   const page = json.messages
   const list: Message[] = (page?.data || [])
   messages.value = list.reverse()
+  if (json.conversation) selected.value = json.conversation
   // mark as read
   fetch(`/conversations/${c.id}/read`, { method: 'POST', headers: { 'X-CSRF-TOKEN': getCsrf(), 'X-Requested-With': 'XMLHttpRequest', 'Accept': 'application/json' }, credentials: 'same-origin' }).catch(() => {})
   await nextTick()
@@ -118,11 +126,18 @@ onMounted(loadConversations)
         <div class="md:col-span-2 border rounded flex flex-col h-[70vh]">
           <div v-if="!selected" class="m-auto text-muted-foreground">Izaberite razgovor</div>
           <template v-else>
-            <div class="px-3 py-2 border-b font-medium">{{ titleFor(selected) }}</div>
+            <div class="px-3 py-2 border-b flex items-center justify-between">
+              <div class="font-medium">{{ titleFor(selected) }}</div>
+              <Link v-if="selected?.ad?.slug" :href="`/listing/${selected.ad.slug}/view`">
+                <Button size="sm" variant="outline">Nazad na oglas</Button>
+              </Link>
+            </div>
             <div id="chat-scroll" class="flex-1 overflow-auto p-3 space-y-3 bg-muted/20">
-              <div v-for="m in messages" :key="m.id" class="bg-white dark:bg-zinc-900 rounded p-2 shadow-sm">
-                <div class="text-xs text-muted-foreground">{{ m.user.name }} · {{ fmtTime(m.created_at) }}</div>
-                <div class="text-sm whitespace-pre-wrap">{{ m.body }}</div>
+              <div v-for="m in messages" :key="m.id" class="flex" :class="m.user.id === currentUserId ? 'justify-end' : 'justify-start'">
+                <div class="rounded p-2 shadow-sm max-w-[75%]" :class="m.user.id === currentUserId ? 'bg-emerald-600 text-white' : 'bg-white dark:bg-zinc-900'">
+                  <div class="text-[11px] opacity-80 mb-0.5">{{ m.user.name }} · {{ fmtTime(m.created_at) }}</div>
+                  <div class="text-sm whitespace-pre-wrap">{{ m.body }}</div>
+                </div>
               </div>
             </div>
             <div class="p-2 border-t space-y-2">

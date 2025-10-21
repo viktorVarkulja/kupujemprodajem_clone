@@ -29,7 +29,7 @@ class UpdateAdRequest extends FormRequest
             'remove_image_ids' => ['nullable', 'array'],
             'remove_image_ids.*' => ['integer'],
             'images' => ['nullable', 'array', 'max:10'],
-            'images.*' => ['file', 'image', 'mimes:jpeg,jpg,png,webp', 'max:5120'],
+            'images.*' => ['file', 'image', 'mimes:jpeg,jpg,png,webp,svg', 'max:5120'],
             'cover_image_id' => ['nullable', 'integer'],
             'cover_image_index' => ['nullable', 'integer', 'min:1'],
             'images_order' => ['nullable', 'array'],

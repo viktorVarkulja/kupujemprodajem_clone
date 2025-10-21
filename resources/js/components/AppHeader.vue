@@ -22,6 +22,9 @@ const siteName = computed(() => (page.props as any).name || 'Oglasi')
           <Link href="/my-listings">
             <Button size="sm" variant="outline">Moji oglasi</Button>
           </Link>
+          <Link href="/chats">
+            <Button size="sm" variant="outline">Razgovori</Button>
+          </Link>
           <Link href="/logout" method="post" as="button">
             <Button size="sm" variant="ghost">Odjava</Button>
           </Link>

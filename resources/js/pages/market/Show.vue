@@ -98,6 +98,43 @@ function onKey(e: KeyboardEvent) {
 
 onMounted(() => window.addEventListener('keydown', onKey))
 onBeforeUnmount(() => window.removeEventListener('keydown', onKey))
+
+// Chat state and actions
+const showMessage = ref(false)
+const messageBody = ref('')
+const sending = ref(false)
+const csrf = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || ''
+
+async function sendMessage() {
+  if (!props.ad?.user) return
+  sending.value = true
+  try {
+    const res = await fetch('/conversations', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRF-TOKEN': csrf,
+        'X-Requested-With': 'XMLHttpRequest',
+        'Accept': 'application/json',
+      },
+      body: JSON.stringify({
+        recipient_id: props.ad.user.id,
+        ad_id: props.ad.id,
+        initial_message: messageBody.value.trim() || null,
+      }),
+      credentials: 'same-origin',
+    })
+    if (!res.ok) throw new Error('Greška pri slanju poruke')
+    messageBody.value = ''
+    showMessage.value = false
+    alert('Razgovor započet. Poruka poslata.')
+  } catch (err) {
+    console.error(err)
+    alert('Nije moguće poslati poruku.')
+  } finally {
+    sending.value = false
+  }
+}
 </script>
 
 <template>
@@ -165,6 +202,20 @@ onBeforeUnmount(() => window.removeEventListener('keydown', onKey))
           <Button as-child>
             <a :href="ad.phone ? `tel:${ad.phone}` : '#'" :aria-disabled="!ad.phone">Pozovi prodavca</a>
           </Button>
+          <div class="pt-2">
+            <Button variant="secondary" @click="showMessage = !showMessage">Pošalji poruku prodavcu</Button>
+          </div>
+          <div v-if="showMessage" class="space-y-2 pt-2">
+            <textarea
+              v-model="messageBody"
+              class="w-full border rounded p-2 text-sm min-h-24"
+              placeholder="Napišite poruku..."
+            />
+            <div class="flex items-center gap-2">
+              <Button :disabled="sending || !messageBody.trim()" @click="sendMessage">Pošalji</Button>
+              <Button variant="outline" @click="showMessage = false">Otkaži</Button>
+            </div>
+          </div>
         </div>
       </div>
     </div>

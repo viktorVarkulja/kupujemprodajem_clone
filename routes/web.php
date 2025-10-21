@@ -6,6 +6,7 @@ use App\Http\Controllers\AdController;
 use App\Http\Controllers\AdPageController;
 use App\Http\Controllers\ConversationController;
 use App\Http\Controllers\MessageController;
+use App\Http\Controllers\ChatPageController;
 
 /*Route::get('/', function () {
     return Inertia::render('Welcome');
@@ -59,3 +60,6 @@ Route::get('/listing/{ad:slug}/edit', [AdPageController::class, 'edit'])->middle
 
 // Media proxy to avoid ad-blockers on '/storage/ads/...'
 Route::get('/media/{image}', [\App\Http\Controllers\MediaController::class, 'show'])->name('media.show');
+
+// Chats page (Inertia)
+Route::get('/chats', [ChatPageController::class, 'index'])->middleware('auth')->name('chats.index');

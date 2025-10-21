@@ -36,7 +36,7 @@ class AdPageController extends Controller
 
     public function show(Ad $ad)
     {
-        $ad->load(['images', 'category']);
+        $ad->load(['images', 'category', 'user:id,name']);
         return Inertia::render('market/Show', [
             'ad' => $ad,
         ]);

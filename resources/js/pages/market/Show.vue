@@ -6,13 +6,30 @@ import AppHeaderLayout from '@/layouts/app/AppHeaderLayout.vue'
 
 type Image = { id:number; path:string; is_cover:boolean; position:number }
 type Category = { id:number; name:string }
+type User = { id:number; name:string }
 type Ad = {
   id:number; slug:string; title:string; description:string; price:string; currency:string;
   city:string|null; phone:string|null; condition:string; delivery_options?: string[] | null;
-  category: Category; images: Image[]
+  category: Category; images: Image[]; user: User
 }
 
 const props = defineProps<{ ad: Ad }>()
+
+// Serbian labels for enums shown in detailed view
+const conditionLabels: Record<string, string> = {
+  new: 'Novo',
+  like_new: 'Kao novo',
+  used: 'Polovno',
+  for_parts: 'Za delove',
+}
+const deliveryLabels: Record<string, string> = {
+  pickup: 'Preuzimanje lično',
+  courier: 'Kurirska služba',
+  cod: 'Plaćanje pouzećem',
+}
+
+const conditionSr = computed(() => conditionLabels[props.ad.condition] ?? props.ad.condition)
+const deliverySr = computed(() => (props.ad.delivery_options ?? []).map(o => deliveryLabels[o] ?? o))
 
 const selected = ref<Image | null>(null)
 const cover = computed(() => selected.value || props.ad.images.find(i => i.is_cover) || props.ad.images[0])
@@ -137,9 +154,10 @@ onBeforeUnmount(() => window.removeEventListener('keydown', onKey))
       <div class="space-y-4">
         <div class="border rounded p-4 space-y-2">
           <div class="text-2xl font-bold">{{ Number(ad.price).toLocaleString() }} {{ ad.currency }}</div>
-          <div class="text-muted-foreground">Stanje: {{ ad.condition }}</div>
+          <div class="text-muted-foreground">Stanje: {{ conditionSr }}</div>
           <div class="text-muted-foreground">Grad: {{ ad.city }}</div>
-          <div class="text-muted-foreground" v-if="ad.delivery_options?.length">Isporuka: {{ ad.delivery_options.join(', ') }}</div>
+          <div class="text-muted-foreground">Objavio: {{ ad.user?.name }}</div>
+          <div class="text-muted-foreground" v-if="ad.delivery_options?.length">Isporuka: {{ deliverySr.join(', ') }}</div>
         </div>
         <div class="border rounded p-4 space-y-2">
           <div class="font-medium">Kontakt</div>

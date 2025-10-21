@@ -127,7 +127,7 @@ async function submit() {
 
         <div>
           <Label for="images">Dodaj slike</Label>
-          <input id="images" type="file" accept="image/*" multiple @change="onFileChange" class="block w-full text-sm" />
+          <input id="images" type="file" accept=".jpg,.jpeg,.png,.webp" multiple @change="onFileChange" class="block w-full text-sm" />
           <div class="text-sm text-muted-foreground mt-1">Do 10 slika, max 5MB po slici.</div>
         </div>
 

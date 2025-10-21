@@ -25,5 +25,16 @@ class DatabaseSeeder extends Seeder
             'name' => 'Test User',
             'email' => 'test@example.com',
         ]);
+
+        // Demo users and ads (with known password '12345678')
+        $this->call([
+            DemoDataSeeder::class,
+        ]);
+
+        // Seed chat demo data (users, conversations, messages) and images for ads
+        $this->call([
+            ChatSeeder::class,
+            AdImageSeeder::class,
+        ]);
     }
 }

@@ -1,11 +1,25 @@
 # KupujemProdajem Clone (Laravel + Vue + Inertia)
 
-Simple marketplace prototype built on Laravel 12, Vue 3, Inertia, Vite, Tailwind.
+This is a small marketplace prototype inspired by KupujemProdajem. It lets users browse categories, filter listings, and view detailed ads with images. The UI is localized for Serbian where it matters (e.g., condition and delivery labels in the detailed view). Authenticated buyers can start a 1‑on‑1 chat with sellers directly from an ad, and manage conversations on a dedicated “Razgovori” page. Chats show message times in 24‑hour format, differentiate your messages visually, and use toasts for feedback. Owners don’t see the “Pošalji poruku prodavcu” button on their own ads, and guests are prompted to log in before starting a chat.
+
+Out of the box, the seeders create demo users, demo ads (with placeholder images), and several conversations so you can explore the flow immediately.
 
 - Backend: Laravel 12 (PHP 8.2+)
 - Frontend: Vue 3 + TypeScript via Inertia + Vite
 - Auth: Laravel Fortify
 - Styling: Tailwind CSS
+
+## Demo Accounts
+
+After `php artisan migrate --seed`, you can sign in with any of the following users (password for all: `12345678`):
+
+- ana@example.com — Ana Admin
+- marko@example.com — Marko Prodavac
+- jelena@example.com — Jelena Kupac
+- ivan@example.com — Ivan Korisnik
+- mila@example.com — Mila Test
+
+Seeders also create several ads for the first few users and attach placeholder images so the homepage and ad pages look realistic. You can start chats from ad pages you do not own, then continue conversations on `/chats`.
 
 ## Prerequisites
 

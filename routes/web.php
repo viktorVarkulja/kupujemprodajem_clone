@@ -4,6 +4,8 @@ use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use App\Http\Controllers\AdController;
 use App\Http\Controllers\AdPageController;
+use App\Http\Controllers\ConversationController;
+use App\Http\Controllers\MessageController;
 
 /*Route::get('/', function () {
     return Inertia::render('Welcome');
@@ -17,7 +19,7 @@ Route::get('dashboard', function () {
 require __DIR__.'/settings.php';
 require __DIR__.'/auth.php';
 
-// Ad routes (backend JSON endpoints)
+// Auth-only JSON endpoints
 Route::middleware('auth')->group(function () {
     Route::post('/ads', [AdController::class, 'store'])->name('ads.store');
     Route::put('/ads/{ad}', [AdController::class, 'update'])->name('ads.update');
@@ -27,6 +29,13 @@ Route::middleware('auth')->group(function () {
     Route::post('/listings', [AdController::class, 'store'])->name('listings.store');
     Route::put('/listings/{ad}', [AdController::class, 'update'])->name('listings.update');
     Route::delete('/listings/{ad}', [AdController::class, 'destroy'])->name('listings.destroy');
+
+    // Conversations & messages
+    Route::get('/conversations', [ConversationController::class, 'index'])->name('conversations.index');
+    Route::post('/conversations', [ConversationController::class, 'store'])->name('conversations.store');
+    Route::get('/conversations/{conversation}', [ConversationController::class, 'show'])->name('conversations.show');
+    Route::post('/conversations/{conversation}/read', [ConversationController::class, 'markRead'])->name('conversations.read');
+    Route::post('/conversations/{conversation}/messages', [MessageController::class, 'store'])->name('messages.store');
 });
 
 Route::get('/ads', [AdController::class, 'index'])->name('ads.index');
